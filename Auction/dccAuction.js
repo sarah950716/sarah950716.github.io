@@ -274,8 +274,6 @@ let abi =
 let dccAuctionContract;
 let dccAuction;
 let accountAddress;
-let currentEtherBalance;
-let currentTokenBalance;
 let tokenPrice;
 
 const productNames = ["iphone7", "iphone8", "iphoneX", "galaxyS9", "galaxyNote9", "LGG7"];
@@ -374,3 +372,5 @@ function buyTokens() {
    });
   });
 }
+
+

@@ -342,7 +342,7 @@ function getTokenInfo() {
 
 function getProductInfo() {
 	productNames.forEach(function(productName) {
-		dccAuction.getHighestVoteFor(productName, function(e, r) {
+		dccAuction.getHighestBidFor(productName, function(e, r) {
 			document.getElementById("highest_" + productName).innerHTML = r.toString();
 		});
 

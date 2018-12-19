@@ -338,7 +338,7 @@ function getTokenInfo() {
   web3.eth.getBalance(dccAuction.address, function(e,v) {
     document.getElementById('contract-balance').innerHTML = web3.fromWei(v.toString()) + "ETH";
   });
-}
+}g
 
 function getProductInfo() {
 	productNames.forEach(function(productName) {

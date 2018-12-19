@@ -342,11 +342,11 @@ function getTokenInfo() {
 
 function getProductInfo() {
 	productNames.forEach(function(productName) {
-		dccAuction.getHighestVoteFor(proudctName, function(e, r) {
+		dccAuction.getHighestVoteFor(productName, function(e, r) {
 			document.getElementById("highest_" + productName).innerHTML = r.toString();
 		});
 
-		dccAuction.getMyselfBidFor(proudctName, function(e, r) {
+		dccAuction.getMyselfBidFor(productName, function(e, r) {
 			document.getElementById("myself_" + productName).innerHTML = r.toString();
 		});
 	});

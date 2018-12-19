@@ -1,39 +1,21 @@
 pragma solidity ^0.4.24;
 
 contract dccAuction {
-    
-    struct participant {
-        address participantAddress;
-        uint tokenBought;    
-    }
-
-    struct product {
-        bytes32 productName;
-        uint highestPrice;
-    }
-
-    // struct voter {
-    //     address voterAddress;
-    //     uint tokenBought;
-    // }
-
+    // A map which maps the name of product to its highest bid.
     mapping (bytes32 => uint) public highestBidOf;
+    // A map which maps the address of participant to his/her tokens bought.
     mapping (address => uint) public tokensOf;
+    // A map which maps (address, product name) to the 
+    // corresponding participant's bid of the product.
     mapping (address => mapping(bytes32 => uint)) public bids;
 
     bytes32[] public productNames;
 
-    // mapping (address => voter) public voters; // ��ǥ�ڵ��� �ּ�
-    // mapping (bytes32 => uint) public votesReceived; // �ĺ��� ��ǥ ��
+    uint public totalToken; 
+    uint public balanceTokens; 
+    uint public tokenPrice; 
     
-    // bytes32[] public candidateNames; // �ĺ��� �迭
-    
-    uint public totalToken; // ��ū �� ����
-    uint public balanceTokens; // ���� ��ū ��
-    uint public tokenPrice; // ��ū ���� ex) 0.01 ether
-    
-    constructor(uint _totalToken, uint _tokenPrice) public // Tx ������ ȣ����
-    {
+    constructor(uint _totalToken, uint _tokenPrice) public {
         totalToken = _totalToken;
         balanceTokens = _totalToken;
         tokenPrice = _tokenPrice;
@@ -44,14 +26,6 @@ contract dccAuction {
         productNames.push("galaxyS9");
         productNames.push("galaxyNote9");
         productNames.push("LGG7");
-
-        // candidateNames.push("Monday");
-        // candidateNames.push("Tuesday");
-        // candidateNames.push("Wednesday");
-        // candidateNames.push("Thursday");
-        // candidateNames.push("Friday");
-        // candidateNames.push("Saturday");
-        // candidateNames.push("Sunday");
     }
     
     function buy() payable public returns (int) {
@@ -62,19 +36,23 @@ contract dccAuction {
     }
     
     function getHighestBidFor(bytes32 productName) view public returns (uint) {
+        // Check if passed productName exists.
         require(getProductIndex(productName) != uint(-1));
         return (highestBidOf[productName]);
     }
 
     function getMyselfBidFor(bytes32 productName) view public returns (uint) {
+        // Check if passed productName exists.
         require(getProductIndex(productName) != uint(-1));
         return (bids[msg.sender][productName]);
     }
     
     function bid(bytes32 productName, uint tokenCountForBid) public {
-        // Participants can't lower their bidding price.
+        // Check if the participant is trying to lower their bidding price, 
+        // which is not allowed.
         require(bids[msg.sender][productName] <= tokenCountForBid);
 
+        // Calculate the amount of addtional tokens needed.
         uint additionalToken = tokenCountForBid - getMyselfBidFor(productName);
 
         // Check if the participant has enough tokens.
@@ -84,6 +62,7 @@ contract dccAuction {
         tokensOf[msg.sender] -= additionalToken;
 
         uint highestBid = getHighestBidFor(productName);
+        // Update the value of highest bid if needed.
         if (highestBid < tokenCountForBid) {
             highestBidOf[productName] = tokenCountForBid;
         }
@@ -98,18 +77,15 @@ contract dccAuction {
         return uint(-1);
     }
     
-    function getTotalToken() view public returns(uint)
-    {
+    function getTotalToken() view public returns(uint) {
         return totalToken;
     }
 
-    function getTokenPrice() view public returns(uint)
-    {
+    function getTokenPrice() view public returns(uint) {
         return tokenPrice;
     }
     
-    function getTokenBought() view public returns(uint)
-    {
+    function getTokenBought() view public returns(uint) {
         return tokensOf[msg.sender];
     }
 }
